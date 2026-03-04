@@ -1,7 +1,7 @@
 # ========================
 # Secrets & API Keys
 # ========================
-# CRITICAL: Never push this file to GitHub!
+
 .env
 
 # ========================
@@ -18,6 +18,7 @@ env/
 .venv/
 env.bak/
 venv.bak/
+research_env/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/

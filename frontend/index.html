@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Research Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 AI Research Assistant</h1>
+            <p>Enter a topic to generate a team of specialized AI experts.</p>
+        </header>
+
+        <section class="input-section">
+            <input type="text" id="topic-input" placeholder="e.g., The Future of Quantum Computing...">
+            <button id="generate-btn">Assemble Team</button>
+        </section>
+
+        <div id="loading-indicator" class="hidden">
+            <div class="spinner"></div>
+            <p id="loading-text">Assembling your researchers...</p>
+        </div>
+
+        <section id="researchers-section" class="hidden">
+            <h2>Select a Researcher to Begin</h2>
+            <div id="researchers-grid"></div>
+        </section>
+
+        <section id="results-section" class="hidden">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('report')">Final Report</button>
+                <button class="tab-btn" onclick="showTab('conversation')">Conversation Log</button>
+            </div>
+            
+            <div id="report-content" class="tab-content active-content"></div>
+            <div id="conversation-content" class="tab-content"></div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 import uuid
 
 # Import our graphs AND the real Researchers model!
@@ -8,6 +9,13 @@ from backend.state import Researchers
 
 app = FastAPI(title="Research Assistant API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Data Models
 
