@@ -14,7 +14,7 @@ def create_researchers(state: Re_State):
     llm_with_structure = llm.with_structured_output(Res_List)
     prompt = ChatPromptTemplate.from_messages([
         ('system', """You are tasked with creating a set of researchers about: {topic}.
-        1. First read carefully the the topic:\n {topic}
+        1. First read carefully the topic:\n {topic}
         2. Determine the most interesting themes based upon documents.
         3. Pick the top {max_researchers} themes."""),
         ('user', " Generate the set of researchers")
