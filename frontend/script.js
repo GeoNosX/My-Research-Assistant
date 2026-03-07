@@ -11,6 +11,7 @@ const reportContent = document.getElementById('report-content');
 const conversationContent = document.getElementById('conversation-content');
 
 let currentTopic = "";
+let currentTeam = [];
 
 // 1. Generate Researchers
 generateBtn.addEventListener('click', async () => {
@@ -31,6 +32,7 @@ generateBtn.addEventListener('click', async () => {
         });
         
         const data = await response.json();
+        currentTeam = data.researchers;
         renderResearchers(data.researchers);
         
     } catch (error) {
@@ -104,3 +106,38 @@ function showTab(tabName) {
     document.getElementById(`${tabName}-content`).classList.add('active-content');
     event.target.classList.add('active');
 }
+
+// --- NEW: Run All Researchers Logic ---
+document.getElementById('run-all-btn').addEventListener('click', async () => {
+    researchersSection.classList.add('hidden');
+    loadingIndicator.classList.remove('hidden');
+    
+    // Warn the user this might take a minute!
+    loadingText.innerText = `The entire team is conducting their interviews in sequence. This may take 1-2 minutes...`;
+
+    try {
+        const response = await fetch(`${API_URL}/run_all`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic: currentTopic, researchers: currentTeam })
+        });
+        
+        const data = await response.json();
+        
+        reportContent.innerHTML = marked.parse(data.report);
+        
+        // Format the giant conversation log
+        conversationContent.innerHTML = data.conversation.map(msg => {
+            if (msg.startsWith('###')) return `<br><h4>${msg.replace('###', '')}</h4>`;
+            return `<p><strong>${msg.includes('question:') ? 'Researcher' : 'Expert'}:</strong> ${msg.replace('question:', '').replace('answer:', '')}</p>`;
+        }).join('<hr style="margin:5px 0; border:0; border-top:1px solid #eee;">');
+
+        resultsSection.classList.remove('hidden');
+        
+    } catch (error) {
+        alert("Error during the massive research process!");
+        console.error(error);
+    } finally {
+        loadingIndicator.classList.add('hidden');
+    }
+});
