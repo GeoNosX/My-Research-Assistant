@@ -13,7 +13,8 @@ from .nodes import (
     wiki_search,
     expert,
     writer,
-    my_condition_edge
+    my_condition_edge,
+    Tavily_search,
 )
 
 # ==========================================
@@ -34,6 +35,7 @@ qa_builder = StateGraph(QuestionState)
 qa_builder.add_node('make_question', make_question)
 qa_builder.add_node('web_search', web_search)
 qa_builder.add_node('wiki_search', wiki_search)
+qa_builder.add_node('tavily_search', Tavily_search)
 qa_builder.add_node('expert', expert)
 qa_builder.add_node('writer', writer)
 
@@ -43,10 +45,12 @@ qa_builder.add_edge(START, 'make_question')
 # After a question is asked, search both web and wiki in parallel
 qa_builder.add_edge('make_question', 'web_search')
 qa_builder.add_edge('make_question', 'wiki_search')
+qa_builder.add_edge('make_question', 'tavily_search')
 
 # Both searches feed their context to the expert
 qa_builder.add_edge('web_search', 'expert')
 qa_builder.add_edge('wiki_search', 'expert')
+qa_builder.add_edge('tavily_search', 'expert')
 
 # The expert answers, and we check our custom condition
 qa_builder.add_conditional_edges(

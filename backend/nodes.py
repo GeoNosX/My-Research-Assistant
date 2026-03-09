@@ -1,5 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.utilities import GoogleSerperAPIWrapper
+from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_community.document_loaders import WikipediaLoader
 from langgraph.types import Send
 
@@ -7,8 +11,13 @@ from langgraph.types import Send
 from .state import Re_State, QuestionState, Res_List, SearchQuery
 from .llm import llm
 
+
+
+
+
 # Initialize the Serper API wrapper
 serper_search = GoogleSerperAPIWrapper()
+tavily_search_tool= TavilySearchResults(max_results=1)
 
 def create_researchers(state: Re_State):
     llm_with_structure = llm.with_structured_output(Res_List)
@@ -64,7 +73,8 @@ def make_question(state: QuestionState):
 
 def web_search(state: QuestionState):
     prompt = ChatPromptTemplate.from_messages([
-        ('system', """Given a conversation between a researcher and an expert on the {topic} your job is generate a query in order use it in a web-search related to that convertation.
+        ('system', """Given a conversation between a researcher and an expert on the {topic} your 
+         job is generate a query in order use it in a web-search related to that convertation.
         1. Pay attention to the questions posed by the researcher.
         2. Analyze the conversation carefully.
         3. Convert researcher's final question into a web search query.
@@ -78,9 +88,28 @@ def web_search(state: QuestionState):
     search_output = serper_search.run(query.search)
     return {'context': [search_output]}
 
+
+def Tavily_search(state: QuestionState):
+    prompt = ChatPromptTemplate.from_messages([
+        ('system', """Given a conversation between a researcher and an expert on the {topic} your 
+         job is generate a query in order use it in a web-search related to that convertation.
+        1. Pay attention to the questions posed by the researcher.
+        2. Analyze the conversation carefully.
+        3. Convert researcher's final question into a web search query.
+        4. Output only the search query.
+        Here is the conversation for you to see: {conversation}""")
+    ])
+    search_llm = llm.with_structured_output(SearchQuery)
+    query = search_llm.invoke(
+        prompt.format_prompt(topic=state['topic_description'], conversation=state['questions_answer']).to_messages()
+    )
+    search_output = tavily_search_tool.run(query.search)
+    return {'context': [search_output]}
+
 def wiki_search(state: QuestionState):
     prompt = ChatPromptTemplate.from_messages([
-        ('system', """Given a conversation between a researcher and an expert on the {topic} your job is generate a query in order use it in a wikipedia search related to that convertation.
+        ('system', """Given a conversation between a researcher and an expert on the {topic} your 
+         job is generate a query in order use it in a wikipedia search related to that convertation.
         1. Pay attention to the questions posed by the researcher.
         2. Analyze the conversation carefully.
         3. Convert researcher's final question into a wikipedia search query.
