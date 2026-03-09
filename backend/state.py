@@ -18,7 +18,7 @@ class Res_List(BaseModel):
 class Re_State(TypedDict):
     re_list: List[Researchers]
     topic: str
-    max_researchers: int
+    max_researchers: int= 3
 
 class QuestionState(TypedDict):
     context: Annotated[list, operator.add]

@@ -13,12 +13,14 @@ serper_search = GoogleSerperAPIWrapper()
 def create_researchers(state: Re_State):
     llm_with_structure = llm.with_structured_output(Res_List)
     prompt = ChatPromptTemplate.from_messages([
-        ('system', """You are tasked with creating a set of researchers about: {topic}.
+        ('system', """You are tasked with creating a set of researchers 
+         that they are specialized in: {topic}.
         1. First read carefully the topic:\n {topic}
         2. Determine the most interesting themes based upon documents.
         3. Pick the top {max_researchers} themes."""),
         ('user', " Generate the set of researchers")
     ])
+    
     output = llm_with_structure.invoke(
         prompt.format_prompt(topic=state['topic'], max_researchers=state['max_researchers']).to_messages()
     )
