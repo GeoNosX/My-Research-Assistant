@@ -1,6 +1,6 @@
 name: CI/CD Pipeline
 
-
+# Run this every time we push to the main branch
 on:
   push:
     branches: [ "main" ]
@@ -26,7 +26,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Pytest
-        
+        # We set fake API keys here just so the code doesn't crash before the mock intercepts it!
         env:
           NVIDIA_API_KEY: "fake_key_for_testing"
           TAVILY_API_KEY: "fake_key_for_testing"
@@ -37,7 +37,7 @@ jobs:
   test-docker-build:
     name: Level 1 - Docker Build Test
     runs-on: ubuntu-latest
-    needs: test-python-backend 
+    needs: test-python-backend # Only build Docker if the Python tests pass first!
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
