@@ -47,7 +47,7 @@ SERPER_API_KEY=your_serper_api_key_here
 
 **3. Build and run the application using Docker:**
 
-Bash
+```bash
 docker compose up --build
 
 **4. Access the App:**
@@ -59,7 +59,7 @@ This project uses pytest for backend testing and GitHub Actions for continuous i
 
 To run the tests locally (outside of Docker):
 
-
+```bash
 pip install -r requirements.txt
 pytest backend/test_main.py
 
