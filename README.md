@@ -33,23 +33,23 @@ You will also need API keys for the following services:
 ## ⚙️ Installation & Setup
 
 **1. Clone the repository:**
-
+```bash
 git clone https://github.com/GeoNosX/My-Research-Assistant
 cd My-Research-Assistant
-
+```
 **2. Set up your Environment Variables:**
 Create a .env file in the root directory and add your API keys:
 
-Απόσπασμα κώδικα
+```bash
 NVIDIA_API_KEY=your_nvidia_api_key_here
 TAVILY_API_KEY=your_tavily_api_key_here
 SERPER_API_KEY=your_serper_api_key_here
-
+```
 **3. Build and run the application using Docker:**
 
 ```bash
 docker compose up --build
-
+```
 **4. Access the App:**
 Open your web browser and navigate to: http://localhost:3000
 
@@ -62,7 +62,7 @@ To run the tests locally (outside of Docker):
 ```bash
 pip install -r requirements.txt
 pytest backend/test_main.py
-
+```
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page if you want to contribute.
